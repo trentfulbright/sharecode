@@ -1,0 +1,141 @@
+
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+
+public class trentspaint extends JFrame {
+    JFrame mainFrame = new JFrame("trentspaint");
+    JPanel leftPanel = new JPanel();
+    JPanel artPanel = new JPanel();
+    JPanel colorButtons = new JPanel();
+    ButtonGroup penSize = new ButtonGroup();
+    JRadioButton smallSize = new JRadioButton();
+    JRadioButton mediumSize = new JRadioButton();
+    JRadioButton largeSize = new JRadioButton();
+    private int size = 0;
+    private int mouseX;
+    private int mouseY;
+    
+    
+    public trentspaint(){
+     setTitle("trentspaint");
+     setLayout(new FlowLayout());
+     setSize(new Dimension(700,700));     
+     setVisible(true);
+     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     setArtPanel();
+     setLeftPanel();   
+     add(leftPanel);
+     add(artPanel);
+     setSizeButtons();
+     
+     
+     
+     
+    }
+    public static void main(String[] args) {
+        new trentspaint();
+    }
+
+    
+    
+    private class DrawingPanel extends JPanel{        
+        public void paintComponent(Graphics g){            
+           super.paintComponent(g); 
+           Graphics2D g2D = (Graphics2D)g;
+           
+           artPanel.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                Rectangle2D.Double rect = new Rectangle2D.Double(e.getX(), e.getY(), 100, 100);
+                g2D.setColor(Color.BLACK);
+                g2D.fill(rect);
+                
+                System.out.println("test");
+                
+            }
+        });
+           smallSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		g2D.setStroke(new BasicStroke(1));
+                System.out.print("Size = 1 ");
+	}
+});
+        mediumSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		g2D.setStroke(new BasicStroke(2));
+                System.out.print("Size = 2 ");
+	}
+});
+        largeSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		g2D.setStroke(new BasicStroke(3));
+                System.out.print("Size = 3 ");
+	}
+});
+           
+       }
+    
+    }
+    public void setLeftPanel(){
+        leftPanel.setPreferredSize(new Dimension(100, 50));
+        leftPanel.setBorder(BorderFactory.createTitledBorder("Size"));
+        leftPanel.add(smallSize);
+        leftPanel.add(mediumSize);
+        leftPanel.add(largeSize);
+        
+        
+    }
+    public void setArtPanel(){
+       
+        
+        artPanel.add(new DrawingPanel());
+        artPanel.setPreferredSize(new Dimension(400, 400));
+        artPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        
+     }
+    
+    public void setSizeButtons(){
+        penSize.add(smallSize);
+        penSize.add(mediumSize);
+        penSize.add(largeSize);
+      //  smallSize.addActionListener(new ActionListener(){
+	//public void actionPerformed(ActionEvent e){
+	//	size = 1;
+        //        System.out.print("Size = 1 ");
+	//}
+//});
+       // mediumSize.addActionListener(new ActionListener(){
+	//public void actionPerformed(ActionEvent e){
+	//	size = 2;
+         //       System.out.print("Size = 2 ");
+	//}
+//});
+       // largeSize.addActionListener(new ActionListener(){
+	//public void actionPerformed(ActionEvent e){
+	//	size = 3;
+       //         System.out.print("Size = 3 ");
+	//}
+//});
+
+    }
+}
+
