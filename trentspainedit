@@ -33,10 +33,13 @@ public class trentspaint extends JFrame {
     JPanel colorButtons = new JPanel();
     JPanel testpanel = new JPanel();
     ButtonGroup penSize = new ButtonGroup();
-    JRadioButton smallSize = new JRadioButton();
-    JRadioButton mediumSize = new JRadioButton();
-    JRadioButton largeSize = new JRadioButton();
-    private int size = 0;
+    JRadioButton smallSize = new JRadioButton("Small");
+    JRadioButton mediumSize = new JRadioButton("Medium");
+    JRadioButton largeSize = new JRadioButton("Large");
+    JRadioButton obeseSize = new JRadioButton("Obese");
+    JRadioButton diabetesSize = new JRadioButton("Diabetes");
+    JButton clear = new JButton("Clear");
+    private int size = 3;
     private int mouseX;
     private int mouseY;
     Color cl = Color.BLACK;
@@ -53,6 +56,7 @@ public class trentspaint extends JFrame {
      initGUI();
      add(leftPanel);
      add(artPanel);
+     
      setVisible(true);
      
      
@@ -66,9 +70,10 @@ public class trentspaint extends JFrame {
                 //Rectangle2D.Double rect = new Rectangle2D.Double(e.getX(), e.getY(), 100, 100);
  
                 //g2D.fill(rect);
-                points.add(new Point(e.getX(), e.getY()));
+                
+                points.add(new Point(e.getX(), e.getY(), cl, size));
                 System.out.println(e.getX() + ", " + e.getY());
-                artPanel.add(new DrawingPanel());
+                artPanel.repaint();
                 
                 
                 
@@ -77,20 +82,43 @@ public class trentspaint extends JFrame {
            smallSize.addActionListener(new ActionListener(){
 	public void actionPerformed(ActionEvent e){
 		//.setStroke(new BasicStroke(1));
-                size = 1;
-                System.out.print("Size = 1 ");
+                size = 3;
+                System.out.print("Size = 3 ");
 	}
 });
+           clear.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		points.clear();
+                artPanel.repaint();
+	}
+});
+           
         mediumSize.addActionListener(new ActionListener(){
 	public void actionPerformed(ActionEvent e){
 		//g2D.setStroke(new BasicStroke(2));
-                System.out.print("Size = 2 ");
+                size = 6;
+                System.out.print("Size = 6 ");
 	}
 });
         largeSize.addActionListener(new ActionListener(){
 	public void actionPerformed(ActionEvent e){
 		//g2D.setStroke(new BasicStroke(3));
-                System.out.print("Size = 3 ");
+                size = 8;
+                System.out.print("Size = 8 ");
+	}
+});
+        obeseSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		//g2D.setStroke(new BasicStroke(3));
+                size = 15;
+                System.out.print("Size = 15 ");
+	}
+});
+        diabetesSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		//g2D.setStroke(new BasicStroke(3));
+                size = 45;
+                System.out.print("Size = 45 ");
 	}
 });
     }
@@ -110,10 +138,10 @@ public class trentspaint extends JFrame {
            Graphics2D g2D = (Graphics2D)g;
            g2D.setStroke(new BasicStroke(10));
            g2D.setPaint(Color.BLACK);
-           g2D.drawLine(60, 76, 331, 351);
+           
            
            for(int i = 0; i<points.size(); i++){
-               Rectangle2D.Double rect = new Rectangle2D.Double(points.get(i).xpos, points.get(i).ypos, size, size);
+               Rectangle2D.Double rect = new Rectangle2D.Double(points.get(i).xpos, points.get(i).ypos, points.get(i).getSize(), points.get(i).getSize());
                g2D.fill(rect);
                
                
@@ -129,9 +157,13 @@ public class trentspaint extends JFrame {
     public class Point{
         int xpos;
         int ypos;
-        public Point(int x, int y){
+        int size;
+        Color color;
+        public Point(int x, int y, Color color,int size){
             this.xpos = x;
             this.ypos = y;
+            this.color = color;
+            this.size = size;
         }
         public int getX(){
             return xpos;
@@ -139,13 +171,23 @@ public class trentspaint extends JFrame {
         public int getY(){
             return ypos;
         }
+        public Color getColor(){
+            return this.color;
+        }
+        public int getSize(){
+            return this.size;
+        }
     }
     public void setLeftPanel(){
-        leftPanel.setPreferredSize(new Dimension(100, 50));
+        leftPanel.setPreferredSize(new Dimension(100, 200));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Size"));
         leftPanel.add(smallSize);
         leftPanel.add(mediumSize);
         leftPanel.add(largeSize);
+        leftPanel.add(obeseSize);
+        leftPanel.add(diabetesSize);
+        leftPanel.add(clear);
+        
         
         
     }
@@ -162,6 +204,8 @@ public class trentspaint extends JFrame {
         penSize.add(smallSize);
         penSize.add(mediumSize);
         penSize.add(largeSize);
+        penSize.add(obeseSize);
+        penSize.add(diabetesSize);
       //  smallSize.addActionListener(new ActionListener(){
 	//public void actionPerformed(ActionEvent e){
 	//	size = 1;
