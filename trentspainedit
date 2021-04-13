@@ -13,9 +13,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
-
+import javax.swing.*;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
@@ -25,6 +27,7 @@ import javax.swing.JRadioButton;
 
 
 public class trentspaint extends JFrame {
+    ArrayList<Point> points = new ArrayList<Point>();
     JPanel leftPanel = new JPanel();
     JPanel artPanel = new JPanel();
     JPanel colorButtons = new JPanel();
@@ -36,6 +39,7 @@ public class trentspaint extends JFrame {
     private int size = 0;
     private int mouseX;
     private int mouseY;
+    Color cl = Color.BLACK;
     
     
     public trentspaint(){
@@ -46,6 +50,7 @@ public class trentspaint extends JFrame {
      setArtPanel();
      setLeftPanel(); 
      setSizeButtons();
+     initGUI();
      add(leftPanel);
      add(artPanel);
      setVisible(true);
@@ -53,6 +58,41 @@ public class trentspaint extends JFrame {
      
      
      
+     
+    }
+    public void initGUI(){
+        artPanel.addMouseMotionListener(new MouseMotionAdapter(){
+            public void mouseDragged(MouseEvent e){
+                //Rectangle2D.Double rect = new Rectangle2D.Double(e.getX(), e.getY(), 100, 100);
+ 
+                //g2D.fill(rect);
+                points.add(new Point(e.getX(), e.getY()));
+                System.out.println(e.getX() + ", " + e.getY());
+                artPanel.add(new DrawingPanel());
+                
+                
+                
+            }
+        });
+           smallSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		//.setStroke(new BasicStroke(1));
+                size = 1;
+                System.out.print("Size = 1 ");
+	}
+});
+        mediumSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		//g2D.setStroke(new BasicStroke(2));
+                System.out.print("Size = 2 ");
+	}
+});
+        largeSize.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		//g2D.setStroke(new BasicStroke(3));
+                System.out.print("Size = 3 ");
+	}
+});
     }
     public static void main(String[] args) {
         new trentspaint();
@@ -71,37 +111,34 @@ public class trentspaint extends JFrame {
            g2D.setStroke(new BasicStroke(10));
            g2D.setPaint(Color.BLACK);
            g2D.drawLine(60, 76, 331, 351);
-           artPanel.addMouseListener(new MouseAdapter(){
-            public void mouseClicked(MouseEvent e){
-                Rectangle2D.Double rect = new Rectangle2D.Double(e.getX(), e.getY(), 100, 100);
-                g2D.setColor(Color.BLACK);
-                g2D.fill(rect);
-                
-                System.out.println(e.getX() + ", " + e.getY());
-                
-            }
-        });
-           smallSize.addActionListener(new ActionListener(){
-	public void actionPerformed(ActionEvent e){
-		g2D.setStroke(new BasicStroke(1));
-                System.out.print("Size = 1 ");
-	}
-});
-        mediumSize.addActionListener(new ActionListener(){
-	public void actionPerformed(ActionEvent e){
-		g2D.setStroke(new BasicStroke(2));
-                System.out.print("Size = 2 ");
-	}
-});
-        largeSize.addActionListener(new ActionListener(){
-	public void actionPerformed(ActionEvent e){
-		g2D.setStroke(new BasicStroke(3));
-                System.out.print("Size = 3 ");
-	}
-});
+           
+           for(int i = 0; i<points.size(); i++){
+               Rectangle2D.Double rect = new Rectangle2D.Double(points.get(i).xpos, points.get(i).ypos, size, size);
+               g2D.fill(rect);
+               
+               
+           }
+           
            
        }
+        
+            
+        
     
+    }
+    public class Point{
+        int xpos;
+        int ypos;
+        public Point(int x, int y){
+            this.xpos = x;
+            this.ypos = y;
+        }
+        public int getX(){
+            return xpos;
+        }
+        public int getY(){
+            return ypos;
+        }
     }
     public void setLeftPanel(){
         leftPanel.setPreferredSize(new Dimension(100, 50));
