@@ -60,11 +60,13 @@ public class trentspaint extends JFrame {
 
     
     
-    private class DrawingPanel extends JPanel{      
-        
+    private class DrawingPanel extends JPanel{    
+        public DrawingPanel(){
+        setPreferredSize(new Dimension(400, 400));
+        }
         public void paintComponent(Graphics g){            
            super.paintComponent(g); 
-           setPreferredSize(new Dimension(400, 400));
+           
            Graphics2D g2D = (Graphics2D)g;
            g2D.setStroke(new BasicStroke(10));
            g2D.setPaint(Color.BLACK);
