@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -27,44 +29,67 @@ import javax.swing.JRadioButton;
 
 
 public class trentspaint extends JFrame {
+    GeneralPath path = new GeneralPath();
     ArrayList<Point> points = new ArrayList<Point>();
+    //arraylist for all the points so that the paint can be repainted
     JPanel leftPanel = new JPanel();
+    //panel for the controls and settings that is placed on the left side
     JPanel artPanel = new JPanel();
+    //main panel that you draw on
     JPanel colorButtons = new JPanel();
+    //unused panel that I was going to use before I discovered JColorChooser
     JPanel testpanel = new JPanel();
-    //JPanel colorPanel = new JPanel();
+    //test panel for running tests
     ButtonGroup penSize = new ButtonGroup();
-    JRadioButton smallSize = new JRadioButton("Small");
+    //button group so that the radiobuttons deselect when you select a new one
+    JRadioButton smallSize = new JRadioButton("Small");  //size buttons
     JRadioButton mediumSize = new JRadioButton("Medium");
     JRadioButton largeSize = new JRadioButton("Large");
     JRadioButton obeseSize = new JRadioButton("Obese");
     JRadioButton diabetesSize = new JRadioButton("Diabetes");
     
     JButton clear = new JButton("Clear");
+    //button to clear the array and repaint
     JButton colorChoose = new JButton("Choose Color");
+    //button to open JColorChooser
     JLabel banner = new JLabel("Current Color");
+    //a label that i planned to use to display the current color but got lazy and just used it for the JColorChooser
     private int size = 3;
+    //default size is 3
     private int mouseX;
     private int mouseY;
+    //variables that could have been used if i got further into the project but didnt get far enough
+    
     Color cl = Color.BLACK;
+    //default color is black
+    JLabel title = new JLabel();
     
     
     public trentspaint(){
      setTitle("trentspaint");
-     setLayout(new FlowLayout());
-     setSize(new Dimension(700,700)); 
-     setBackground(Color.BLACK);
+     //most of the time I do the camelcase thing but i did this as a joke to mspaint
+     setLayout(new BorderLayout());
+     setSize(new Dimension(725,700)); 
+     getContentPane().setBackground(Color.BLUE);
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
      setArtPanel();
      setLeftPanel(); 
      setSizeButtons();
      initGUI();
-     add(leftPanel);
-     add(artPanel);
+     add(leftPanel, BorderLayout.WEST);
+     add(artPanel, BorderLayout.EAST);
+     title.setPreferredSize(new Dimension(50, 100));
+     title.setForeground(Color.BLACK);
+     title.setText("Trentspaint");
+     //sets a title in the middle of the thingy
      
-     //add(colorPanel);
+     add(title, BorderLayout.CENTER);
+     //adds the title to the center
+     
+     
      
      setVisible(true);
+     //makes it visible
      
      
      
@@ -72,13 +97,14 @@ public class trentspaint extends JFrame {
      
     }
     public void initGUI(){
+        //method used to set the mouse listeners that make the gui do cool stuff
         artPanel.addMouseMotionListener(new MouseMotionAdapter(){
             public void mouseDragged(MouseEvent e){
-                //Rectangle2D.Double rect = new Rectangle2D.Double(e.getX(), e.getY(), 100, 100);
- 
-                //g2D.fill(rect);
+                //this listener is the one that adds the points to the array when the mouse is dragged
+                Point newpoint = new Point(e.getX(), e.getY(), cl, size, true);
+                points.add(newpoint);
                 
-                points.add(new Point(e.getX(), e.getY(), cl, size));
+                
                 System.out.println(e.getX() + ", " + e.getY());
                 artPanel.repaint();
                 
@@ -88,13 +114,17 @@ public class trentspaint extends JFrame {
         });
         artPanel.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
-                points.add(new Point(e.getX(), e.getY(), cl, size));
+                //method for drawing points when the mouse is just clicked instead of dragged
+                Point newpoint = new Point(e.getX(), e.getY(), cl, size, false);
+                points.add(newpoint);
+                //path.moveTo(newpoint.getX(), newpoint.getY());
                 artPanel.repaint();
+                
                 
                 
             }
         });
-        
+        //size action listoners to change the size of the lines
            smallSize.addActionListener(new ActionListener(){
 	public void actionPerformed(ActionEvent e){
 		//.setStroke(new BasicStroke(1));
@@ -148,6 +178,7 @@ public class trentspaint extends JFrame {
 });
     }
     public static void main(String[] args) {
+        //main method to make code do stuff
         new trentspaint();
     }
 
@@ -155,19 +186,29 @@ public class trentspaint extends JFrame {
     
     private class DrawingPanel extends JPanel{    
         public DrawingPanel(){
-        setPreferredSize(new Dimension(498, 699));
+        setPreferredSize(new Dimension(500, 700));
+        //sets size of the drawingpanel
         }
         public void paintComponent(Graphics g){            
            super.paintComponent(g); 
-           
+           //sets default stuff and creates g2D
            Graphics2D g2D = (Graphics2D)g;
            g2D.setStroke(new BasicStroke(10));
            g2D.setPaint(Color.BLACK);
-           
+           Point previousPoint = new Point(1, 1,Color.BLACK, 1, true);
            
            for(int i = 0; i<points.size(); i++){
-               
+               //goes through the list and draws the points
                Rectangle2D.Double rect = new Rectangle2D.Double(points.get(i).xpos, points.get(i).ypos, points.get(i).getSize(), points.get(i).getSize());
+               
+               //if(points.get(i).getLine() == true){
+                   //g2D.setStroke(new BasicStroke(points.get(i).getSize()));
+                   //g2D.setColor(points.get(i).getColor());
+                   //Line2D.Double line = new Line2D.Double(points.get(i).getX(), points.get(i).getY(), previousPoint.getX(), previousPoint.getY());
+                   //g2D.draw(line);
+               //}
+               previousPoint = points.get(i);
+               //this is for a failed attempt to make the points connect to each other and therefore is useless unless i come back to try to finish it
                g2D.setPaint(points.get(i).getColor());
                g2D.fill(rect);
                
@@ -182,21 +223,28 @@ public class trentspaint extends JFrame {
     
     }
     public class Point{
+        //creates a point object that I can use in an arraylist to pass values for the drawing area
         int xpos;
         int ypos;
         int size;
         Color color;
-        public Point(int x, int y, Color color,int size){
+        Boolean line;
+        public Point(int x, int y, Color color,int size, Boolean line){
             this.xpos = x;
             this.ypos = y;
             this.color = color;
             this.size = size;
+            this.line = line;
+            //line boolean is for connecting points but i couldnt get it to work in the time i had so it will just be stuck here
         }
         public int getX(){
             return xpos;
         }
         public int getY(){
             return ypos;
+        }
+        public Boolean getLine(){
+            return line;
         }
         public Color getColor(){
             return this.color;
@@ -205,7 +253,9 @@ public class trentspaint extends JFrame {
             return this.size;
         }
     }
+    
     public void setLeftPanel(){
+        //sets the specifications for the left panel or the options panel
         leftPanel.setPreferredSize(new Dimension(125, 250));
         leftPanel.setBorder(BorderFactory.createTitledBorder("Options"));
         leftPanel.add(smallSize);
@@ -225,42 +275,24 @@ public class trentspaint extends JFrame {
     }
     public void setArtPanel(){
        
-        
+        //adds the drawingpanel to the artpanel and sets specifications, there also was a border but it got covered up by the drawingpanel so you cant see it
         artPanel.add(new DrawingPanel());
         artPanel.setPreferredSize(new Dimension(500, 700));
         artPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
+        
      }
     
     public void setSizeButtons(){
+        //adds the buttons to the buttongroup so that they work right
         penSize.add(smallSize);
         penSize.add(mediumSize);
         penSize.add(largeSize);
         penSize.add(obeseSize);
         penSize.add(diabetesSize);
-      //  smallSize.addActionListener(new ActionListener(){
-	//public void actionPerformed(ActionEvent e){
-	//	size = 1;
-        //        System.out.print("Size = 1 ");
-	//}
-//});
-       // mediumSize.addActionListener(new ActionListener(){
-	//public void actionPerformed(ActionEvent e){
-	//	size = 2;
-         //       System.out.print("Size = 2 ");
-	//}
-//});
-       // largeSize.addActionListener(new ActionListener(){
-	//public void actionPerformed(ActionEvent e){
-	//	size = 3;
-       //         System.out.print("Size = 3 ");
-	//}
-//});
+      
 
     }
-    //public void setColorPanel(){
-        
-      //  colorPanel.add(new JColorChooser());
-    //}
+    
 }
 
