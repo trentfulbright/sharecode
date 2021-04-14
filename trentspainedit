@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -16,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -32,13 +32,17 @@ public class trentspaint extends JFrame {
     JPanel artPanel = new JPanel();
     JPanel colorButtons = new JPanel();
     JPanel testpanel = new JPanel();
+    //JPanel colorPanel = new JPanel();
     ButtonGroup penSize = new ButtonGroup();
     JRadioButton smallSize = new JRadioButton("Small");
     JRadioButton mediumSize = new JRadioButton("Medium");
     JRadioButton largeSize = new JRadioButton("Large");
     JRadioButton obeseSize = new JRadioButton("Obese");
     JRadioButton diabetesSize = new JRadioButton("Diabetes");
+    
     JButton clear = new JButton("Clear");
+    JButton colorChoose = new JButton("Choose Color");
+    JLabel banner = new JLabel("Current Color");
     private int size = 3;
     private int mouseX;
     private int mouseY;
@@ -48,7 +52,8 @@ public class trentspaint extends JFrame {
     public trentspaint(){
      setTitle("trentspaint");
      setLayout(new FlowLayout());
-     setSize(new Dimension(700,700));     
+     setSize(new Dimension(700,700)); 
+     setBackground(Color.BLACK);
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
      setArtPanel();
      setLeftPanel(); 
@@ -56,6 +61,8 @@ public class trentspaint extends JFrame {
      initGUI();
      add(leftPanel);
      add(artPanel);
+     
+     //add(colorPanel);
      
      setVisible(true);
      
@@ -79,6 +86,15 @@ public class trentspaint extends JFrame {
                 
             }
         });
+        artPanel.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                points.add(new Point(e.getX(), e.getY(), cl, size));
+                artPanel.repaint();
+                
+                
+            }
+        });
+        
            smallSize.addActionListener(new ActionListener(){
 	public void actionPerformed(ActionEvent e){
 		//.setStroke(new BasicStroke(1));
@@ -90,6 +106,15 @@ public class trentspaint extends JFrame {
 	public void actionPerformed(ActionEvent e){
 		points.clear();
                 artPanel.repaint();
+	}
+});
+           colorChoose.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e){
+		Color newColor = JColorChooser.showDialog(
+                     trentspaint.this,
+                     "Choose Color",
+                     banner.getBackground());
+                cl = newColor;
 	}
 });
            
@@ -130,7 +155,7 @@ public class trentspaint extends JFrame {
     
     private class DrawingPanel extends JPanel{    
         public DrawingPanel(){
-        setPreferredSize(new Dimension(400, 400));
+        setPreferredSize(new Dimension(498, 699));
         }
         public void paintComponent(Graphics g){            
            super.paintComponent(g); 
@@ -141,7 +166,9 @@ public class trentspaint extends JFrame {
            
            
            for(int i = 0; i<points.size(); i++){
+               
                Rectangle2D.Double rect = new Rectangle2D.Double(points.get(i).xpos, points.get(i).ypos, points.get(i).getSize(), points.get(i).getSize());
+               g2D.setPaint(points.get(i).getColor());
                g2D.fill(rect);
                
                
@@ -179,14 +206,19 @@ public class trentspaint extends JFrame {
         }
     }
     public void setLeftPanel(){
-        leftPanel.setPreferredSize(new Dimension(100, 200));
-        leftPanel.setBorder(BorderFactory.createTitledBorder("Size"));
+        leftPanel.setPreferredSize(new Dimension(125, 250));
+        leftPanel.setBorder(BorderFactory.createTitledBorder("Options"));
         leftPanel.add(smallSize);
         leftPanel.add(mediumSize);
         leftPanel.add(largeSize);
         leftPanel.add(obeseSize);
         leftPanel.add(diabetesSize);
         leftPanel.add(clear);
+        
+        leftPanel.add(colorChoose);
+        //banner.setOpaque(true);
+        //banner.setFont(new Font("SansSerif", Font.BOLD, 24));
+        //banner.setPreferredSize(new Dimension(30, 30));
         
         
         
@@ -195,7 +227,7 @@ public class trentspaint extends JFrame {
        
         
         artPanel.add(new DrawingPanel());
-        artPanel.setPreferredSize(new Dimension(400, 400));
+        artPanel.setPreferredSize(new Dimension(500, 700));
         artPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
      }
@@ -226,5 +258,9 @@ public class trentspaint extends JFrame {
 //});
 
     }
+    //public void setColorPanel(){
+        
+      //  colorPanel.add(new JColorChooser());
+    //}
 }
 
