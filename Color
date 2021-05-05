@@ -1,0 +1,91 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author s820702
+ */
+public class Color {
+    private int red;
+    private int blue;
+    private int green;
+    public Color(){
+        this.red = 0;
+        this.blue = 0;
+        this.green = 0;
+    }
+    public Color(int r, int g, int b){
+        setRed(r);
+        setGreen(g);
+        setBlue(b);
+        
+    }
+    public void setRed(int red){
+        if(red >255 || red<0){
+            throw new IllegalArgumentException("Value " + red + " Out of Bounds 0-255");
+        }
+        else
+            this.red = red;
+        
+    }
+    public void setGreen(int green){
+        if(green >255 || green<0){
+            throw new IllegalArgumentException("Value " + green + " Out of Bounds 0-255");
+        }
+        else
+            this.green = green;
+    }
+    public void setBlue(int blue){
+        if(blue >255 || blue<0){
+            throw new IllegalArgumentException("Value " + blue + " Out of Bounds 0-255");
+        }
+        else
+            this.blue = blue;
+    }
+    public String toString(){
+        return "#(" + red + "," + green + "," + blue + ")";
+    }
+    
+}
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author s820702
+ */
+public class AlphaColor extends Color{
+    private int alpha;
+    public AlphaColor(int r, int g, int b, int a){
+        super(r, g, b);
+        alpha = a;
+    }
+    public AlphaColor(double cyan, double magenta, double yellow, double black){
+        super((int)(255 * (1-black)*(1-cyan)))
+        
+    }
+    public int getAlpha(){
+        return alpha;
+    }
+    public void setAlpha(int a){
+        if(a>255 || a<0){
+            throw new IllegalArgumentException("Value: " + a + "Exceeds the boundaries for argument");
+        }
+        else
+            this.alpha = a;
+        
+    }
+    public void dissolve(){
+        if(red>0){
+            r += -1;
+        }
+    }
+    
+    
+}
