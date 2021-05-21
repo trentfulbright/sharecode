@@ -117,6 +117,7 @@ public class MyAgent extends Agent {
         int currentSpot;
         int spacesBefore;
         int spacesAfter;
+        //this loop is the horizontal check
         for(int i = 0; i<7; i++){                                       
             if(i>0){
                 spacesBefore = i;
@@ -154,6 +155,7 @@ public class MyAgent extends Agent {
                     }
                 }                                                                                            
             }
+            //this loop is the vertical check
         for(int i = 0; i>7; i++){
             int count = 0;
             int vertIndex = getLowestEmptyIndex(myGame.getColumn(i));
