@@ -1,4 +1,3 @@
-
 import java.util.Random;
 
 public class MyAgent extends Agent {
@@ -47,7 +46,28 @@ public class MyAgent extends Agent {
             else{
                 
                 for(int i = 1; i<6; i++){
+                    boolean right = false;
+                    boolean left = false;
                     int slot = getLowestEmptyIndex(myGame.getColumn(i));
+                    if(slot>0){
+                    if(myGame.getColumn(i+1).getSlot(slot).getIsFilled() == true){
+                        if(myGame.getColumn(i+1).getSlot(slot).getIsRed() == false){
+                            right = true;
+                        }
+                        
+                    }
+                    if(myGame.getColumn(i-1).getSlot(slot).getIsFilled() == true){
+                        if(myGame.getColumn(i-1).getSlot(slot).getIsRed() == false){
+                            left = true;
+                        }
+                        
+                    }
+                    if(right && left){
+                        moveOnColumn(i);
+                        return;
+                    }
+                    }
+                    
                     
                 }
                 moveOnColumn(randomMove());
@@ -183,7 +203,111 @@ public class MyAgent extends Agent {
             if(count>2){
                 return i;
             }
+            
         }
+        //diagonal check
+        for(int i = 0; i<7; i++){
+            
+            int slot = getLowestEmptyIndex(myGame.getColumn(i));
+            if(slot>-1){
+            if(i==3 && slot>2){
+                int k = 1;
+                int count = 0;
+                for(int j = 1; j<4; j++){                    
+                    if(myGame.getColumn(i+j).getSlot(slot-k).getIsRed()){
+                        count++;                       
+                        if(count>2){
+                            return i;
+                        }                        
+                    }
+                    k++;                    
+                }
+                k = 1;
+                count = 0;
+                for(int j = 1; j<4; j++){                    
+                    if(myGame.getColumn(i-j).getSlot(slot-k).getIsRed()){
+                        count++;                        
+                        if(count>2){
+                            return i;
+                        }                        
+                    }
+                    k++;
+                }
+            }
+            if(i==3 && slot<2){
+                int count = 0;
+                int k = 1;
+                for(int j = 1; j<4; j++){
+                    
+                    if(myGame.getColumn(i+j).getSlot(slot+k).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                        
+                    }
+                    k++;
+                }
+                count = 0;
+                k = 1;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot+k).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                    k++;
+                }
+                
+            }
+            if(i>-1 && i<3 && slot>2){
+                int count = 0;
+                int k = 1;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i+j).getSlot(slot-j).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>3 && slot>2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot-j).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>-1 && i<3 && slot<2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i+j).getSlot(slot+j).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>3 && slot<2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot+j).getIsRed()){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+        }
+       }
           return -1;  
         }
         
@@ -257,6 +381,107 @@ public class MyAgent extends Agent {
             if(count>2){
                 return i;
             }
+        }
+        for(int i = 0; i<7; i++){
+            int slot = getLowestEmptyIndex(myGame.getColumn(i));
+            if(slot>-1){
+            if(i==3 && slot>2){
+                int k = 1;
+                int count = 0;
+                for(int j = 1; j<4; j++){                    
+                    if(myGame.getColumn(i+j).getSlot(slot-k).getIsFilled() == true && myGame.getColumn(i+j).getSlot(slot-k).getIsRed() == false){
+                        count++;                       
+                        if(count>2){
+                            return i;
+                        }                        
+                    }
+                    k++;                    
+                }
+                k = 1;
+                count = 0;
+                for(int j = 1; j<4; j++){                    
+                    if(myGame.getColumn(i-j).getSlot(slot-k).getIsFilled() == true && myGame.getColumn(i-j).getSlot(slot-k).getIsRed() == false){
+                        count++;                        
+                        if(count>2){
+                            return i;
+                        }                        
+                    }
+                    k++;
+                }
+            }
+            if(i==3 && slot<2){
+                int count = 0;
+                int k = 1;
+                for(int j = 1; j<4; j++){
+                    
+                    if(myGame.getColumn(i+j).getSlot(slot+k).getIsFilled() == true && myGame.getColumn(i+j).getSlot(slot+k).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                        
+                    }
+                    k++;
+                }
+                count = 0;
+                k = 1;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot+k).getIsFilled() == true && myGame.getColumn(i-j).getSlot(slot+k).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                    k++;
+                }
+                
+            }
+            if(i>-1 && i<3 && slot>2){
+                int count = 0;
+                int k = 1;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i+j).getSlot(slot-j).getIsFilled() == true && myGame.getColumn(i+j).getSlot(slot-j).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>3 && slot>2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot-j).getIsFilled() == true && myGame.getColumn(i-j).getSlot(slot-j).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>-1 && i<3 && slot<2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i+j).getSlot(slot+j).getIsFilled() == true && myGame.getColumn(i+j).getSlot(slot+j).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+            if(i>3 && slot<2){
+                int count = 0;
+                for(int j = 1; j<4; j++){
+                    if(myGame.getColumn(i-j).getSlot(slot+j).getIsFilled() == true && myGame.getColumn(i-j).getSlot(slot+j).getIsRed() == false){
+                        count++;
+                        if(count>2){
+                            return i;
+                        }
+                    }
+                }
+            }
+          }
         }
           return -1;  
         
