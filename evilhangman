@@ -1,0 +1,57 @@
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author s820702
+ */
+public class HangmanManager {
+    List<String> originalDictionary;
+    int length;
+    int max;
+    Set<String> culledDictionary;
+    Set<String> guesses = new TreeSet<String>();
+    String pattern;
+
+    public HangmanManager(List<String> dictionary2, int length, int max) {
+        originalDictionary = dictionary2;
+        culledDictionary = (Set<String>) dictionary2;
+        this.length = length;
+        this.max = max;
+        
+        
+    }
+
+    public Set<String> words() {
+        return (Set<String>) culledDictionary;
+    }
+
+    int guessesLeft() {
+        return max - guesses.size();
+    }
+
+    Object pattern() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    Set<String> guesses() {
+        return guesses;
+    }
+
+    int record(char ch) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+
+    
+    
+}
