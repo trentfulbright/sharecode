@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -26,6 +27,9 @@ public class HangmanManager {
         culledDictionary = (Set<String>) dictionary2;
         this.length = length;
         this.max = max;
+        char[] chars = new char[max];
+        Arrays.fill(chars, '-');
+        pattern = new String(chars);
         
         
     }
