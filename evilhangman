@@ -1,7 +1,8 @@
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /*
@@ -21,6 +22,8 @@ public class HangmanManager {
     Set<String> culledDictionary;
     Set<String> guesses = new TreeSet<String>();
     String pattern;
+    final char[] templatePattern;
+    Set<String> words;
 
     public HangmanManager(List<String> dictionary2, int length, int max) {
         originalDictionary = dictionary2;
@@ -30,7 +33,12 @@ public class HangmanManager {
         char[] chars = new char[max];
         Arrays.fill(chars, '-');
         pattern = new String(chars);
-        
+        templatePattern = chars;
+        words = new TreeSet<>();
+         for(String s : dictionary2) {
+        if(s.length() == length) 
+            words.add(s);
+   }
         
     }
 
@@ -42,8 +50,8 @@ public class HangmanManager {
         return max - guesses.size();
     }
 
-    Object pattern() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String pattern() {
+       return pattern;
     }
 
     Set<String> guesses() {
@@ -51,7 +59,37 @@ public class HangmanManager {
     }
 
     int record(char ch) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map temp = new TreeMap<String, Set<String>>();
+        for(int i = 0; i<originalDictionary.size(); i++){
+            if(!temp.containsKey(getPattern(originalDictionary.get(i), ch))){
+                Set<String> set = new TreeSet<>();
+                set.add(originalDictionary.get(i));
+                temp.put(getPattern(originalDictionary.get(i), ch), set);                               
+            }
+            else{
+                
+                Set<String> set = (TreeSet<String>) temp.get(getPattern(originalDictionary.get(i), ch));
+                set.add(originalDictionary.get(i));
+                temp.put(getPattern(originalDictionary.get(i), ch), set);
+            }
+        }
+        Set<String> currentSet = (Set<String>) temp.get(getPattern(originalDictionary.get(1), ch));
+        for(Object s : temp.keySet()){
+            if(temp.get(s).size()>currentSize){
+                
+            }
+        }
+ 
+        
+    }
+    String getPattern(String cur, char c){
+        char[] temp = templatePattern;
+        for(int i = 0; i<cur.length(); i++){
+            if(Character.compare(cur.charAt(i), c)== 0 ){
+                temp[i] = c;
+            }
+        }
+        return new String(temp);
     }
 
     
