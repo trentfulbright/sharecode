@@ -74,13 +74,28 @@ public class HangmanManager {
             }
         }
         Set<String> currentSet = (Set<String>) temp.get(getPattern(originalDictionary.get(1), ch));
-        for(Object s : temp.keySet()){
-            if(temp.get(s).size()>currentSize){
+        words = findSet(temp, ch);
+ 
+        
+    }
+    public String changePattern(String pattern){
+        char[] temp = this.pattern.toCharArray();
+        char[] temp2 = pattern.toCharArray();
+        for(int i = 0; i<temp.length; i++){
+            if(temp2[i].compareTo('-') != 0){
                 
             }
         }
- 
-        
+    }
+    
+    private Set<String> findSet(Map<String, Set<String>> map, char ch){
+        Set<String> currentSet = (Set<String>) map.get(getPattern(originalDictionary.get(1), ch));
+        for(String s : map.keySet()){
+            if(map.get(s).size() > currentSet.size()){
+                currentSet = map.get(s);
+            }
+        }
+        return currentSet;
     }
     String getPattern(String cur, char c){
         char[] temp = templatePattern;
