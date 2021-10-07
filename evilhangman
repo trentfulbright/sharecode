@@ -21,13 +21,13 @@ public class HangmanManager {
     int max;
     Set<String> culledDictionary;
     Set<String> guesses = new TreeSet<String>();
+    int guessNumber;
     String pattern;
     final char[] templatePattern;
     Set<String> words;
 
     public HangmanManager(List<String> dictionary2, int length, int max) {
-        originalDictionary = dictionary2;
-        culledDictionary = (Set<String>) dictionary2;
+        guessNumber = 0;
         this.length = length;
         this.max = max;
         char[] chars = new char[max];
@@ -38,16 +38,17 @@ public class HangmanManager {
          for(String s : dictionary2) {
         if(s.length() == length) 
             words.add(s);
+            
    }
         
     }
 
     public Set<String> words() {
-        return (Set<String>) culledDictionary;
+        return words;
     }
 
     int guessesLeft() {
-        return max - guesses.size();
+        return max - guessNumber;
     }
 
     String pattern() {
@@ -59,6 +60,9 @@ public class HangmanManager {
     }
 
     int record(char ch) {
+        String charString = String.valueOf(ch);
+        guesses.add(charString);
+        guessNumber++;
         Map temp = new TreeMap<String, Set<String>>();
         for(int i = 0; i<originalDictionary.size(); i++){
             if(!temp.containsKey(getPattern(originalDictionary.get(i), ch))){
@@ -75,17 +79,29 @@ public class HangmanManager {
         }
         Set<String> currentSet = (Set<String>) temp.get(getPattern(originalDictionary.get(1), ch));
         words = findSet(temp, ch);
+        return occurances(findPattern(temp, ch));
  
         
     }
-    public String changePattern(String pattern){
+    public void changePattern(String pattern){
         char[] temp = this.pattern.toCharArray();
         char[] temp2 = pattern.toCharArray();
         for(int i = 0; i<temp.length; i++){
-            if(temp2[i].compareTo('-') != 0){
-                
+            if(Character.compare(temp[i], '-') != 0){
+                temp[i] = temp2[i];
             }
         }
+        this.pattern = new String(temp);
+    }
+    public int occurances(String pattern){
+        int count = 0;
+        char[] temp = pattern.toCharArray();
+        for(int i = 0; i<temp.length; i++){
+            if(Character.compare(temp[i], '-') != 0){
+                count++;
+            }
+        }
+        return count;
     }
     
     private Set<String> findSet(Map<String, Set<String>> map, char ch){
@@ -96,6 +112,18 @@ public class HangmanManager {
             }
         }
         return currentSet;
+    }
+    private String findPattern(Map<String, Set<String>> map, char ch){
+        Set<String> currentSet = (Set<String>) map.get(getPattern(originalDictionary.get(1), ch));
+        String tempKey = "";
+        for(String s : map.keySet()){
+            if(map.get(s).size() > currentSet.size()){
+                currentSet = map.get(s);
+                tempKey = s;
+            }
+        }
+        return tempKey;
+        
     }
     String getPattern(String cur, char c){
         char[] temp = templatePattern;
