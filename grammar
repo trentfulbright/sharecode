@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -13,7 +14,7 @@ import java.util.TreeMap;
  * @author trent
  */
 public class Grammar {
-    private TreeMap<String, String> rules = new TreeMap<>();
+    private TreeMap<String, ArrayList<String>> rules = new TreeMap<>();
 
     public Grammar(List<String> bnf) {
         if(bnf == null || bnf.isEmpty()){
@@ -22,14 +23,22 @@ public class Grammar {
         for(String s : bnf){
             String[] temp = s.split("::=");
             if(rules.containsKey(temp[0])){
-                rules.put(temp[0], rules.get(temp[0]) + "|" + temp[1]);
+                String[] temp2 = temp[1].split("\\|");
+                ArrayList<String> ary = rules.get(temp[0]);
+                for(int i = 1; i<temp2.length; i++){
+                    ary.add(temp2[i]);
+                }               
+                rules.put(temp[0], ary);
             }
-            else
-                rules.put(temp[0], temp[1]);
-        }
-        
-        
-        
+            else{               
+                String[] temp2 = temp[1].split("\\|");
+                ArrayList<String> ary = new ArrayList();
+                for(int i = 1; i<temp2.length; i++){
+                    ary.add(temp2[i]);
+                }
+                rules.put(temp[0], ary);
+            }
+        }                    
     }
 
     boolean isNonTerminal(String symbol) {
@@ -41,10 +50,18 @@ public class Grammar {
         return false;
     }
 
-    List<String> getRandom(int number, String nonTerminal) {
+    public List<String> getRandom(int number, String nonTerminal) {
+        if(number<0 | isNonTerminal(nonTerminal) == false){
+            throw new IllegalArgumentException("bruh");
+        }
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    List<String> getRandom(String nonTerminal) {
+    public String getRandom(String nonTerminal) {
+        if(nonTerminal == null | isNonTerminal(nonTerminal) == false){
+            throw new IllegalArgumentException("bruh");
+        }
+        String[] temp = rules.get(nonTerminal).split(" ");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
