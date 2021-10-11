@@ -1,0 +1,57 @@
+
+import java.util.List;
+import java.util.TreeMap;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author trent
+ */
+public class Grammar {
+    private TreeMap<String, String> rules = new TreeMap<>();
+
+    public Grammar(List<String> bnf) {
+        if(bnf == null || bnf.isEmpty()){
+            throw new IllegalArgumentException("bruh");
+        }
+        for(String s : bnf){
+            String[] temp = s.split("::=");
+            if(rules.containsKey(temp[0])){
+                rules.put(temp[0], rules.get(temp[0]) + "|" + temp[1]);
+            }
+            else
+                rules.put(temp[0], temp[1]);
+        }
+        
+        
+        
+    }
+
+    boolean isNonTerminal(String symbol) {
+        for(String s : rules.keySet()){
+            if(symbol.compareTo(s) == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    List<String> getRandom(int number, String nonTerminal) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    List<String> getRandom(String nonTerminal) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public String toString(){
+        return "";
+    }
+    
+    
+    
+}
