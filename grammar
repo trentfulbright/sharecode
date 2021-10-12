@@ -76,16 +76,16 @@ public class Grammar {
         String sum = "";
         for(int i = 0; i<temp.length; i++){
             if(isNonTerminal(temp[i]) == false){
-                if(sum.contains(" " + temp[i]) ==  false){
+                
+                if(sum.contains(temp[i]) ==  false){
+                    
                     sum += " " + temp[i];
                 }
                 
             }
             else{
-                String str = getRandom(temp[i]);
-                if(sum.contains(" " + str) == false){
-                   sum += " " + str;
-                }
+                
+                sum += " " + getRandom(temp[i]);
             }
             
         }
