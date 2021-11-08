@@ -1,0 +1,45 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author s820702
+ */
+public class RingBuffer {
+    private double[] ringBuffer;
+    private int start;
+    private int end;
+
+    RingBuffer(int capacity) {
+        ringBuffer = new double[capacity];
+        start = 0;
+        end = 0;
+    }
+
+    public int size() {
+        if(end<start){
+            return (ringBuffer.length - start) + end;
+        }
+        return end - start;
+    }
+
+    String isEmpty() {
+        return(size == 0);
+    }
+
+    String isFull() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void enqueue(double d) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void dequeue() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+}
