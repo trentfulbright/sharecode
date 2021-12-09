@@ -1,0 +1,83 @@
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author trent
+ */
+public class Inversions {
+    private Comparable[] list;
+	private long count;
+    public Inversions() throws IOException {
+    	list = new Comparable[]{90,40,20,30,10,67};					// Set 1
+    	count=0;
+    	mergeSort(list, 0, list.length-1);
+    	System.out.println(count + " inversions");
+
+    	list = new Comparable[]{3,15,61,11,7,9,2};					// Set 2
+    	count=0;
+    	mergeSort(list, 0, list.length-1);
+    	System.out.println(count + " inversions");
+
+    	Scanner file = new Scanner(new File("IntegerArray.txt"));	// Set 3
+		list = new Comparable[100000];
+		for(int i=0; i<list.length;i++){
+			list[i] = file.nextInt();
+		}
+		long start = System.currentTimeMillis();
+		count=0;
+    	mergeSort(list, 0, list.length-1);
+    	long stop = System.currentTimeMillis();
+    	System.out.println("count is: " + count + " in :" + ((stop-start)/1000) +" seconds");
+    }
+    
+    
+    
+    private void mergeSort( Comparable[] stuff, int front, int back)  //O( Log N )
+	{
+		int mid = (front+back)/2;
+		if( mid==front) return;
+		mergeSort(stuff, front, mid);
+		mergeSort(stuff, mid, back);
+		merge(stuff, front, back);
+	}
+
+	private void merge(Comparable[] stuff, int front, int back)  //O(N)
+	{
+	   Comparable[] temp = new Comparable[back-front];
+	   int i = front, j = (front+back)/2, k =0;
+	   int mid =j;
+	   while(i<mid && j<back)
+	   {
+	      if(stuff[i].compareTo(stuff[j])<0){
+	         temp[k++]=stuff[i++];
+                 count++;
+              }
+              
+	      else
+	         temp[k++]=stuff[j++];
+              count += mid - i;
+              
+	   }
+
+	   while(i<mid)
+	      temp[k++]=stuff[i++];
+	   while(j<back)
+	      temp[k++]=stuff[j++];
+	   for(i = 0; i<back-front; ++i)
+	      stuff[front+i]=temp[i];
+	}
+        
+        public static void main(String[] args)throws IOException {
+       new Inversions();
+    }
+    
+}
